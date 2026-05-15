@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Match the mobile app: deep navy gradient + white text by default,
+   SF Pro Display when available. Page-level components can still
+   override surface colors as needed. */
+@layer base {
+  html, body, #root {
+    min-height: 100%;
+  }
+  body {
+    background: linear-gradient(180deg, #0D1229 0%, #0A0E21 100%);
+    color: #FFFFFF;
+    font-family: 'SF Pro Display', 'Inter', system-ui, -apple-system,
+                 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #252B44;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3a4366;
+  }
+}
+
+@layer components {
+  /* Reusable card surface mirroring AppColors.surfaceElevated. */
+  .nova-card {
+    @apply bg-nova-surface-elevated border border-nova-card-border rounded-nova-lg;
+  }
+  /* Primary button with the mobile primaryGradient. */
+  .btn-nova-primary {
+    @apply bg-nova-primary text-white font-semibold rounded-nova py-2.5 px-4
+           shadow-nova-card hover:opacity-95 active:opacity-90 transition
+           disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+  .btn-nova-secondary {
+    @apply bg-nova-surface-elevated border border-nova-card-border text-nova-text-primary
+           rounded-nova py-2.5 px-4 hover:bg-nova-card-border transition
+           disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+  .input-nova {
+    @apply w-full bg-nova-surface-elevated border border-nova-card-border
+           text-nova-text-primary placeholder-nova-text-hint rounded-nova
+           px-3 py-2 focus:outline-none focus:border-nova-primary
+           focus:ring-1 focus:ring-nova-primary transition;
+  }
+  .label-nova {
+    @apply block text-sm text-nova-text-secondary mb-1;
+  }
+}
