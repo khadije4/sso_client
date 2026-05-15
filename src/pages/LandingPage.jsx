@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Header from '../components/Layout/Header'; // ajustez le chemin selon votre structure
+import Header from '../components/Layout/header';
 
 // Dans le return, juste après la div principale :
 
