@@ -13,7 +13,6 @@ const S = {
   },
   metricLabel: { fontSize: 13, color: '#6B7280', marginBottom: 4 },
   metricValue: { fontSize: 26, fontWeight: 700, color: '#111827' },
-  metricTrend: (positive) => ({ fontSize: 12, fontWeight: 500, color: positive ? '#10B981' : '#EF4444', marginTop: 2 }),
   iconBox: (color, bg) => ({
     width: 40, height: 40, borderRadius: 10, background: bg,
     display: 'flex', alignItems: 'center', justifyContent: 'center', color,
@@ -99,18 +98,17 @@ const ClientStatsPage = () => {
 
       {/* Metric cards */}
       {[
-        { key: 'total_transactions', label: 'Total Transactions', type: 'transactions', trend: '+12.5%', positive: true, iconColor: '#2563EB', iconBg: '#EFF6FF' },
-        { key: 'success_rate', label: 'Success Rate', type: 'success', trend: '+0.3%', positive: true, suffix: '%', iconColor: '#2563EB', iconBg: '#EFF6FF' },
-        { key: 'suspicious_activity', label: 'Suspicious Activity', type: 'suspicious', trend: '+5.2%', positive: false, iconColor: '#F59E0B', iconBg: '#FFFBEB' },
-        { key: 'avg_latency_ms', label: 'Avg Latency', type: 'latency', trend: '-8ms', positive: true, suffix: 'ms', iconColor: '#2563EB', iconBg: '#EFF6FF' },
+        { key: 'total_transactions', label: 'Total Transactions', type: 'transactions', iconColor: '#2563EB', iconBg: '#EFF6FF' },
+        { key: 'success_rate', label: 'Success Rate', type: 'success', suffix: '%', iconColor: '#2563EB', iconBg: '#EFF6FF' },
+        { key: 'suspicious_activity', label: 'Suspicious Activity', type: 'suspicious', iconColor: '#F59E0B', iconBg: '#FFFBEB' },
+        { key: 'avg_latency_ms', label: 'Avg Latency', type: 'latency', suffix: 'ms', iconColor: '#2563EB', iconBg: '#EFF6FF' },
       ].map(m => (
         <div key={m.key} style={S.metricCard}>
           <div>
             <div style={S.metricLabel}>{m.label}</div>
             <div style={S.metricValue}>
-              {isLoading ? '…' : `${fmtNum(stats?.[m.key])}${m.suffix || ''}`}
+              {isLoading ? '…' : (stats?.[m.key] != null ? `${fmtNum(stats[m.key])}${m.suffix || ''}` : '—')}
             </div>
-            <div style={S.metricTrend(m.positive)}>{m.trend}</div>
           </div>
           <div style={S.iconBox(m.iconColor, m.iconBg)}>
             <MetricIcon type={m.type} />
@@ -178,26 +176,24 @@ const ClientStatsPage = () => {
       </div>
 
       {/* Biometric Auth Metrics */}
-      <div style={S.card}>
-        <div style={S.sectionTitle}>Biometric Auth Metrics</div>
-        {isLoading ? (
-          <div style={{ color: '#9CA3AF', fontSize: 14 }}>Loading…</div>
-        ) : (
+      {stats?.biometric_metrics && (
+        <div style={S.card}>
+          <div style={S.sectionTitle}>Biometric Auth Metrics</div>
           <div>
             {[
-              { label: 'Face Recognition Success', value: `${stats?.biometric_metrics?.face_recognition_success ?? 97.9}%`, color: '#10B981' },
-              { label: 'Fingerprint Success', value: `${stats?.biometric_metrics?.fingerprint_success ?? 98.5}%`, color: '#10B981' },
-              { label: 'Avg Verification Time', value: stats?.biometric_metrics?.avg_verification_time ?? '1.2s', color: '#2563EB' },
-              { label: 'Failed Verifications', value: stats?.biometric_metrics?.failed_verifications ?? 0, color: '#F59E0B' },
-            ].map((item, i, arr) => (
+              { label: 'Face Recognition Success', value: stats.biometric_metrics.face_recognition_success != null ? `${stats.biometric_metrics.face_recognition_success}%` : null, color: '#10B981' },
+              { label: 'Fingerprint Success', value: stats.biometric_metrics.fingerprint_success != null ? `${stats.biometric_metrics.fingerprint_success}%` : null, color: '#10B981' },
+              { label: 'Avg Verification Time', value: stats.biometric_metrics.avg_verification_time ?? null, color: '#2563EB' },
+              { label: 'Failed Verifications', value: stats.biometric_metrics.failed_verifications ?? null, color: '#F59E0B' },
+            ].filter(item => item.value != null).map((item, i, arr) => (
               <div key={item.label} style={{ ...S.metricRow, borderBottom: i < arr.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
                 <div style={{ fontSize: 14, color: '#374151' }}>{item.label}</div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: item.color }}>{item.value}</div>
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -34,8 +34,6 @@ const S = {
     background: '#F9FAFB', marginBottom: 12,
   },
   checkRow: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 },
-  progressBar: { height: 6, borderRadius: 3, background: '#E5E7EB', marginTop: 8 },
-  progressFill: (pct) => ({ height: '100%', borderRadius: 3, background: '#2563EB', width: `${pct}%` }),
 };
 
 const Toggle = ({ checked, onChange }) => (
@@ -134,7 +132,6 @@ const ClientSettingsPage = () => {
   };
 
   const currentPlan = client?.plan;
-  const usagePct = 49; // $2450 / $5000 ~ 49%
 
   if (isLoading) return <div style={{ padding: 32, color: '#9CA3AF' }}>Loading…</div>;
 
@@ -307,6 +304,9 @@ const ClientSettingsPage = () => {
           <div>
             <div style={{ fontSize: 12, color: '#6B7280', marginBottom: 2 }}>Current Plan</div>
             <div style={{ fontSize: 20, fontWeight: 700, color: '#111827' }}>{currentPlan?.name || '—'}</div>
+            {currentPlan?.price_monthly && (
+              <div style={{ fontSize: 13, color: '#6B7280', marginTop: 2 }}>{currentPlan.price_monthly} EUR/mo</div>
+            )}
           </div>
           <select
             style={{ ...S.select, width: 'auto', minWidth: 140 }}
@@ -322,37 +322,6 @@ const ClientSettingsPage = () => {
               <option key={p.id} value={p.id}>{p.name} – {p.price_monthly} EUR/mo</option>
             ))}
           </select>
-        </div>
-
-        {/* Usage bar */}
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-            <span style={{ fontSize: 13, color: '#374151', fontWeight: 500 }}>Monthly Usage</span>
-            <span style={{ fontSize: 13, color: '#374151', fontWeight: 500 }}>
-              ${(currentPlan?.price_monthly ? (parseFloat(currentPlan.price_monthly) * usagePct / 100).toFixed(0) : '—')} / ${currentPlan?.price_monthly ?? '—'}
-            </span>
-          </div>
-          <div style={S.progressBar}>
-            <div style={S.progressFill(usagePct)} />
-          </div>
-        </div>
-
-        {/* Payment method */}
-        <div style={{
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          padding: '12px 16px', borderRadius: 10, border: '1px solid #E5E7EB',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <svg style={{ width: 20, height: 20, color: '#6B7280' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-            </svg>
-            <div>
-              <div style={{ fontSize: 13, color: '#374151', fontWeight: 500 }}>Payment Method</div>
-              <div style={{ fontSize: 12, color: '#9CA3AF' }}>•••• •••• •••• 4242</div>
-            </div>
-          </div>
-          <button style={S.btnSecondary}>Update</button>
         </div>
       </div>
 
