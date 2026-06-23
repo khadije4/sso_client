@@ -77,6 +77,7 @@ const ClientSettingsPage = () => {
   });
   const [notifications, setNotifications] = useState({ email_notifications: true });
   const [savedMsg, setSavedMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const { data: client, isLoading } = useQuery({
     queryKey: ['client', clientId],
@@ -107,14 +108,30 @@ const ClientSettingsPage = () => {
     mutationFn: (data) => updateClientSettings(clientId, data),
     onSuccess: () => {
       queryClient.invalidateQueries(['client', clientId]);
+      setErrorMsg('');
       setSavedMsg('Changes saved successfully.');
       setTimeout(() => setSavedMsg(''), 3000);
+    },
+    onError: (err) => {
+      const msg = err?.response?.data?.detail
+        || (typeof err?.response?.data === 'string' ? err.response.data : null)
+        || 'Failed to save. Please try again.';
+      setErrorMsg(msg);
+      setTimeout(() => setErrorMsg(''), 5000);
     },
   });
 
   const planMutation = useMutation({
     mutationFn: (planId) => changeClientPlan(clientId, planId),
-    onSuccess: () => queryClient.invalidateQueries(['client', clientId]),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['client', clientId]);
+      setSavedMsg('Plan updated successfully.');
+      setTimeout(() => setSavedMsg(''), 3000);
+    },
+    onError: () => {
+      setErrorMsg('Failed to change plan. Please try again.');
+      setTimeout(() => setErrorMsg(''), 5000);
+    },
   });
 
   const handleSaveOrg = (e) => {
@@ -146,7 +163,16 @@ const ClientSettingsPage = () => {
           border: '1px solid #BBF7D0', color: '#15803D', fontSize: 13, fontWeight: 500,
           marginBottom: 20,
         }}>
-          {savedMsg}
+          ✓ {savedMsg}
+        </div>
+      )}
+      {errorMsg && (
+        <div style={{
+          padding: '10px 16px', borderRadius: 8, background: '#FEF2F2',
+          border: '1px solid #FCA5A5', color: '#B91C1C', fontSize: 13, fontWeight: 500,
+          marginBottom: 20,
+        }}>
+          {errorMsg}
         </div>
       )}
 
