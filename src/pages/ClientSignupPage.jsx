@@ -21,6 +21,10 @@ const ClientSignupPage = () => {
       setErrors({ password2: ['Les mots de passe ne correspondent pas.'] });
       return;
     }
+    if (form.phone && !/^\+[1-9]\d{6,14}$/.test(form.phone.trim())) {
+      setErrors({ phone: ['Format invalide. Utilisez le format international: +213XXXXXXXXX'] });
+      return;
+    }
     setLoading(true);
     try {
       const { company_name, ...userPayload } = form;
@@ -84,6 +88,7 @@ const ClientSignupPage = () => {
           <div>
             <label className="label-nova">Telephone (optionnel)</label>
             <input type="tel" className="input-nova" value={form.phone}
+              placeholder="+213XXXXXXXXX"
               onChange={(e) => setField('phone', e.target.value)} />
             {fieldError('phone')}
           </div>

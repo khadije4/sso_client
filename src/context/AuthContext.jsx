@@ -100,6 +100,32 @@ export const AuthProvider = ({ children }) => {
     throw new Error('No access token');
   };
 
+  // Face login without providing an identifier — calls /api/biometric/identify/
+  const faceIdentifyLogin = async (imageFile, redirectAuto = true) => {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    const response = await api.post('/biometric/identify/', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    if (response.data.access) {
+      setTokens(response.data.access, response.data.refresh);
+      const userRes = await api.get('/user/me/');
+      setUser(userRes.data);
+      if (redirectAuto) navigate(POST_LOGIN_FALLBACK);
+      return { success: true, user: userRes.data };
+    }
+    throw new Error('No access token');
+  };
+
+  // Complete a QR login after the browser receives confirmed tokens from the status poll
+  const qrLogin = async (accessToken, refreshToken, redirectAuto = true) => {
+    setTokens(accessToken, refreshToken);
+    const userRes = await api.get('/user/me/');
+    setUser(userRes.data);
+    if (redirectAuto) navigate(POST_LOGIN_FALLBACK);
+    return { success: true, user: userRes.data };
+  };
+
   const value = {
     user,
     loading,
@@ -107,6 +133,8 @@ export const AuthProvider = ({ children }) => {
     mfaVerify,
     logout,
     biometricLogin,
+    faceIdentifyLogin,
+    qrLogin,
     isAuthenticated: !!getAccessToken(),
   };
 

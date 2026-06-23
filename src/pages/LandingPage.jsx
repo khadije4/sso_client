@@ -1,338 +1,278 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Header from '../components/Layout/header';
-
-// Dans le return, juste après la div principale :
-
-
-const StatusDot = ({ type }) => {
-  const color = type === 'success' ? 'bg-emerald-500' : 'bg-gray-500';
-  return <span className={`w-1.5 h-1.5 rounded-full ${color}`} />;
-};
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // If already logged in, send straight to the client workspace selector.
-    // The mobile-app end-user flow no longer lives in this web app.
     const token = localStorage.getItem('access_token');
-    if (token) {
-      navigate('/client/select');
-    }
+    if (token) navigate('/client/select');
   }, [navigate]);
 
-  // Fonctionnalités pour utilisateurs finaux
-  const userFeatures = [
+  const services = [
     {
-      id: 1,
-      name: 'SSO & OAuth2',
-      desc: 'Connectez toutes vos applications avec un seul identifiant. Compatible OAuth2, OpenID Connect et PKCE.',
-      iconBg: 'bg-violet-500/10',
-      iconColor: 'text-violet-400',
-      icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>,
-      panel: [
-        { label: 'Flux supportés', value: 'Authorization Code, PKCE, Client Credentials', dot: null },
-        { label: 'Jetons', value: 'JWT, opaque', dot: null },
-        { label: 'Scopes', value: 'openid, profile, email, phone', dot: 'success' },
-      ]
+      icon: (
+        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+      ),
+      title: 'Fraud Detection',
+      desc: 'AI-powered real-time fraud analysis and prevention to protect your users and transactions.',
+      color: '#3B82F6',
+      bg: 'rgba(59,130,246,0.12)',
     },
     {
-      id: 2,
-      name: 'Multi‑facteurs (MFA)',
-      desc: 'Renforcez la sécurité avec TOTP, codes par email/SMS.',
-      iconBg: 'bg-emerald-500/10',
-      iconColor: 'text-emerald-400',
-      icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>,
-      panel: [
-        { label: 'TOTP', value: 'Google Authenticator, Authy', dot: 'success' },
-        { label: 'Email OTP', value: 'Disponible', dot: null },
-        { label: 'SMS OTP', value: 'via Twilio', dot: null },
-      ]
+      icon: (
+        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      ),
+      title: 'Face Recognition',
+      desc: 'Secure biometric authentication using advanced facial recognition technology.',
+      color: '#8B5CF6',
+      bg: 'rgba(139,92,246,0.12)',
     },
     {
-      id: 3,
-      name: 'Reconnaissance faciale',
-      desc: 'Authentification biométrique avec IA – détection de visage, empreinte et vérification.',
-      iconBg: 'bg-sky-500/10',
-      iconColor: 'text-sky-400',
-      icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
-      panel: [
-        { label: 'Modèle', value: 'FaceNet (ONNX)', dot: null },
-        { label: 'Détection', value: 'MTCNN', dot: null },
-        { label: 'Seuil', value: '0.70 configurable', dot: null },
-      ]
-    }
+      icon: (
+        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+        </svg>
+      ),
+      title: 'Fingerprint Auth',
+      desc: 'Multi-factor biometric security with fingerprint authentication integration.',
+      color: '#10B981',
+      bg: 'rgba(16,185,129,0.12)',
+    },
+    {
+      icon: (
+        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      ),
+      title: 'Intrusion Detection',
+      desc: 'Advanced threat monitoring and intrusion prevention for your infrastructure.',
+      color: '#F59E0B',
+      bg: 'rgba(245,158,11,0.12)',
+    },
+    {
+      icon: (
+        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+        </svg>
+      ),
+      title: 'Device Trust',
+      desc: 'Bot detection and device fingerprinting to ensure only trusted devices access your platform.',
+      color: '#EF4444',
+      bg: 'rgba(239,68,68,0.12)',
+    },
+    {
+      icon: (
+        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+        </svg>
+      ),
+      title: 'SSO Integration',
+      desc: 'Seamless single sign-on with OAuth2 and OpenID Connect for all your applications.',
+      color: '#06B6D4',
+      bg: 'rgba(6,182,212,0.12)',
+    },
   ];
-
-  // Fonctionnalités pour clients (organisations)
-  const clientFeatures = [
-    {
-      id: 1,
-      name: 'Multi‑tenant complet',
-      desc: 'Gérez plusieurs organisations, chacune avec ses utilisateurs, ses applications OAuth et son plan.',
-      iconBg: 'bg-amber-500/10',
-      iconColor: 'text-amber-400',
-      icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>,
-      panel: [
-        { label: 'Clients', value: 'Organisations abonnées', dot: null },
-        { label: 'Plans', value: 'Basic, Pro, Enterprise', dot: null },
-        { label: 'Utilisateurs', value: 'Illimités selon plan', dot: null },
-      ]
-    },
-    {
-      id: 2,
-      name: 'Applications OAuth2',
-      desc: 'Créez et gérez des applications clientes directement depuis votre espace organisation.',
-      iconBg: 'bg-indigo-500/10',
-      iconColor: 'text-indigo-400',
-      icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>,
-      panel: [
-        { label: 'Client ID / Secret', value: 'Génération automatique', dot: null },
-        { label: 'Redirect URIs', value: 'Multiples', dot: null },
-        { label: 'Types', value: 'Confidentiel / Public', dot: 'success' },
-      ]
-    },
-    {
-      id: 3,
-      name: 'Statistiques & équipe',
-      desc: 'Visualisez l’activité de vos applications, gérez les membres et leurs rôles.',
-      iconBg: 'bg-rose-500/10',
-      iconColor: 'text-rose-400',
-      icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>,
-      panel: [
-        { label: 'Membres', value: 'Invitations, rôles', dot: null },
-        { label: 'Statistiques', value: 'Utilisateurs actifs, authentifications', dot: null },
-        { label: 'Abonnement', value: 'Géré par plan', dot: 'success' },
-      ]
-    }
-  ];
-
-  const [activeUserFeature, setActiveUserFeature] = React.useState(0);
-  const [activeClientFeature, setActiveClientFeature] = React.useState(0);
-  const currentUser = userFeatures[activeUserFeature];
-  const currentClient = clientFeatures[activeClientFeature];
 
   return (
-    <div className="min-h-screen bg-primary-900">
-      <Header />
-      {/* Hero Section – général */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-800/30 to-primary-900/50" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-          <div className="text-center">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight">
-              Votre identité numérique,
-              <span className="text-primary-400"> unifiée en toute sécurité</span>
-            </h1>
-            <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto">
-              Authentification unique, multi‑facteurs et reconnaissance faciale par IA – le tout dans une même plateforme.
-              Intégrez‑la facilement à vos applications.
-            </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/client/login"
-                className="px-8 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-lg transition shadow-lg hover:shadow-xl"
-              >
-                Commencer
+    <div className="min-h-screen" style={{ background: '#0B0B1A', fontFamily: 'Inter, system-ui, sans-serif' }}>
+
+      {/* Navbar */}
+      <nav
+        className="sticky top-0 z-50 w-full"
+        style={{ background: 'rgba(11,11,26,0.85)', borderBottom: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(12px)' }}
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg,#3B82F6,#6366F1)' }}>
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5}
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <span className="text-white text-lg font-bold tracking-tight">NovaGard</span>
+            </div>
+
+            <div className="hidden md:flex items-center gap-8">
+              <a href="#services" className="text-sm text-gray-400 hover:text-white transition-colors">Features</a>
+              <a href="#pricing" className="text-sm text-gray-400 hover:text-white transition-colors">Pricing</a>
+              <a href="#docs" className="text-sm text-gray-400 hover:text-white transition-colors">Docs</a>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Link to="/client/login" className="text-sm font-medium text-gray-300 hover:text-white transition-colors px-3 py-1.5">
+                Login
               </Link>
               <Link
                 to="/client/signup"
-                className="px-8 py-3 bg-primary-800 border border-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition"
+                className="text-sm font-semibold text-white px-4 py-2 rounded-lg transition hover:opacity-90"
+                style={{ background: 'linear-gradient(135deg,#3B82F6,#6366F1)' }}
               >
-                Créer un compte
+                Get Started
               </Link>
             </div>
           </div>
         </div>
-      </div>
+      </nav>
 
-      {/* Section pour utilisateurs finaux */}
-      <section className="px-8 py-24 border-t border-primary-800/30">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-4 text-xs font-medium tracking-widest uppercase text-primary-400">
-            Pour vous, utilisateur final
-          </div>
-          <div
-            className="font-display font-extrabold text-white mb-4"
-            style={{ fontSize: 'clamp(26px,3vw,40px)', letterSpacing: '-0.02em', lineHeight: 1.1 }}
-          >
-            Authentification simple et sécurisée
-          </div>
-          <p className="text-gray-500 text-base mb-14" style={{ maxWidth: 400, lineHeight: 1.65 }}>
-            Connectez‑vous en toute confiance à vos applications préférées.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-            <div className="flex flex-col gap-3">
-              {userFeatures.map((f, i) => (
-                <button
-                  key={f.id}
-                  onClick={() => setActiveUserFeature(i)}
-                  className={`feat-card-hover text-left rounded-2xl p-5 transition-all duration-200 grid gap-4 ${
-                    activeUserFeature === i ? 'border-primary-500/40' : ''
-                  }`}
-                  style={{
-                    background: activeUserFeature === i ? 'rgba(47,47,228,0.08)' : '#13131f',
-                    border: `1px solid ${
-                      activeUserFeature === i ? 'rgba(47,47,228,0.35)' : 'rgba(255,255,255,0.07)'
-                    }`,
-                    gridTemplateColumns: '44px 1fr',
-                    alignItems: 'start',
-                  }}
-                >
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${f.iconBg} ${f.iconColor}`}>
-                    {f.icon}
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-white mb-1">{f.name}</div>
-                    <div className="text-xs text-gray-500 leading-relaxed">{f.desc}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-            <div
-              className="rounded-2xl p-7 flex flex-col gap-4"
-              style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.07)', minHeight: 320 }}
-            >
-              <div className="flex items-center gap-3 pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${currentUser.iconBg} ${currentUser.iconColor}`}>
-                  {currentUser.icon}
-                </div>
-                <div>
-                  <div className="text-sm font-medium text-white">{currentUser.name}</div>
-                  <div className="text-xs text-gray-600">OAuth2 / OpenID Connect</div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                {currentUser.panel.map(row => (
-                  <div
-                    key={row.label}
-                    className="flex items-center justify-between px-3 py-2.5 rounded-lg text-xs"
-                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}
-                  >
-                    <span className="text-gray-500">{row.label}</span>
-                    <span
-                      className={`font-medium flex items-center gap-1.5 ${row.accent ? 'text-primary-400' : 'text-white'}`}
-                    >
-                      {row.dot && <StatusDot type={row.dot} />}
-                      {row.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+      {/* Hero */}
+      <section className="relative overflow-hidden pt-28 pb-24 px-6">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full opacity-20"
+            style={{ background: 'radial-gradient(ellipse,#3B82F6 0%,transparent 70%)', filter: 'blur(80px)' }} />
+          <div className="absolute top-20 right-10 w-64 h-64 rounded-full opacity-10"
+            style={{ background: 'radial-gradient(circle,#8B5CF6,transparent)', filter: 'blur(60px)' }} />
         </div>
-      </section>
 
-      {/* Section pour clients (organisations) */}
-      <section className="px-8 py-24 border-t border-primary-800/30">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-4 text-xs font-medium tracking-widest uppercase text-primary-400">
-            Pour votre organisation
-          </div>
+        <div className="relative max-w-4xl mx-auto text-center">
           <div
-            className="font-display font-extrabold text-white mb-4"
-            style={{ fontSize: 'clamp(26px,3vw,40px)', letterSpacing: '-0.02em', lineHeight: 1.1 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 text-xs font-medium text-blue-300"
+            style={{ background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.25)' }}
           >
-            Gérez vos utilisateurs et applications
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+            Powered by AI
           </div>
-          <p className="text-gray-500 text-base mb-14" style={{ maxWidth: 400, lineHeight: 1.65 }}>
-            Une plateforme pensée pour les équipes et les entreprises.
+
+          <h1
+            className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight"
+            style={{ letterSpacing: '-0.02em' }}
+          >
+            AI-Powered{' '}
+            <span style={{ background: 'linear-gradient(90deg,#3B82F6,#8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              FinTech Security
+            </span>
+          </h1>
+
+          <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+            Comprehensive security microservices for fraud detection, biometric authentication,
+            and intrusion prevention — all in one platform.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-            <div className="flex flex-col gap-3">
-              {clientFeatures.map((f, i) => (
-                <button
-                  key={f.id}
-                  onClick={() => setActiveClientFeature(i)}
-                  className={`feat-card-hover text-left rounded-2xl p-5 transition-all duration-200 grid gap-4 ${
-                    activeClientFeature === i ? 'border-primary-500/40' : ''
-                  }`}
-                  style={{
-                    background: activeClientFeature === i ? 'rgba(47,47,228,0.08)' : '#13131f',
-                    border: `1px solid ${
-                      activeClientFeature === i ? 'rgba(47,47,228,0.35)' : 'rgba(255,255,255,0.07)'
-                    }`,
-                    gridTemplateColumns: '44px 1fr',
-                    alignItems: 'start',
-                  }}
-                >
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${f.iconBg} ${f.iconColor}`}>
-                    {f.icon}
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-white mb-1">{f.name}</div>
-                    <div className="text-xs text-gray-500 leading-relaxed">{f.desc}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-            <div
-              className="rounded-2xl p-7 flex flex-col gap-4"
-              style={{ background: '#13131f', border: '1px solid rgba(255,255,255,0.07)', minHeight: 320 }}
-            >
-              <div className="flex items-center gap-3 pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${currentClient.iconBg} ${currentClient.iconColor}`}>
-                  {currentClient.icon}
-                </div>
-                <div>
-                  <div className="text-sm font-medium text-white">{currentClient.name}</div>
-                  <div className="text-xs text-gray-600">Gestion client</div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                {currentClient.panel.map(row => (
-                  <div
-                    key={row.label}
-                    className="flex items-center justify-between px-3 py-2.5 rounded-lg text-xs"
-                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}
-                  >
-                    <span className="text-gray-500">{row.label}</span>
-                    <span
-                      className={`font-medium flex items-center gap-1.5 ${row.accent ? 'text-primary-400' : 'text-white'}`}
-                    >
-                      {row.dot && <StatusDot type={row.dot} />}
-                      {row.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action final */}
-      <div className="py-20">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-3xl font-bold text-white">Prêt à sécuriser votre identité ?</h2>
-          <p className="mt-4 text-xl text-gray-300">
-            Rejoignez les milliers d’utilisateurs et d’organisations qui nous font confiance.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/client/login"
-              className="inline-block px-8 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-lg transition shadow-lg"
-            >
-              Espace client
-            </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/client/signup"
-              className="inline-block px-8 py-3 bg-primary-800 border border-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition"
+              className="px-8 py-3.5 text-base font-semibold text-white rounded-xl transition-all hover:scale-105"
+              style={{ background: 'linear-gradient(135deg,#3B82F6,#6366F1)', boxShadow: '0 4px 24px rgba(59,130,246,0.35)' }}
             >
-              Créer un compte
+              Start Free Trial
+            </Link>
+            <Link
+              to="/client/login"
+              className="px-8 py-3.5 text-base font-semibold text-white rounded-xl transition-all hover:bg-white/10"
+              style={{ border: '1px solid rgba(255,255,255,0.2)' }}
+            >
+              View Demo
             </Link>
           </div>
         </div>
+      </section>
+
+      {/* Stats bar */}
+      <div className="max-w-5xl mx-auto px-6 mb-20">
+        <div
+          className="rounded-2xl grid grid-cols-2 sm:grid-cols-4"
+          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
+        >
+          {[
+            { value: '99.9%', label: 'Uptime SLA' },
+            { value: '<50ms', label: 'Response Time' },
+            { value: '500+', label: 'Organizations' },
+            { value: '10M+', label: 'Auth Events / Day' },
+          ].map((s, i) => (
+            <div
+              key={s.label}
+              className="px-8 py-6 text-center"
+              style={{ borderRight: i < 3 ? '1px solid rgba(255,255,255,0.07)' : 'none' }}
+            >
+              <div className="text-2xl font-bold text-white mb-1">{s.value}</div>
+              <div className="text-xs text-gray-500">{s.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
+      {/* Services */}
+      <section id="services" className="px-6 pb-28">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Our Services</h2>
+            <p className="text-gray-400 max-w-xl mx-auto">
+              Everything you need to secure your platform and protect your users.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map(s => (
+              <div
+                key={s.title}
+                className="rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 cursor-default"
+                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
+              >
+                <div
+                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-5"
+                  style={{ background: s.bg, color: s.color }}
+                >
+                  {s.icon}
+                </div>
+                <h3 className="text-base font-semibold text-white mb-2">{s.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Banner */}
+      <section className="px-6 pb-28">
+        <div
+          className="max-w-4xl mx-auto text-center rounded-2xl py-16 px-8 relative overflow-hidden"
+          style={{ background: 'linear-gradient(135deg,rgba(59,130,246,0.15),rgba(99,102,241,0.15))', border: '1px solid rgba(99,102,241,0.25)' }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'radial-gradient(ellipse at center,rgba(59,130,246,0.1) 0%,transparent 70%)' }}
+          />
+          <h2 className="relative text-3xl sm:text-4xl font-bold text-white mb-4">
+            Ready to secure your platform?
+          </h2>
+          <p className="relative text-gray-400 text-lg mb-8">
+            Join hundreds of organizations trusting NovaGard with their security.
+          </p>
+          <Link
+            to="/client/signup"
+            className="relative inline-block px-10 py-3.5 text-base font-semibold text-white rounded-xl transition-all hover:scale-105"
+            style={{ background: 'linear-gradient(135deg,#3B82F6,#6366F1)', boxShadow: '0 4px 24px rgba(59,130,246,0.4)' }}
+          >
+            Get Started Today
+          </Link>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="bg-primary-800/50 border-t border-primary-700 py-8">
-        <div className="max-w-7xl mx-auto px-4 text-center text-gray-400 text-sm">
-          © 2025 Plateforme d’Identité. Tous droits réservés.
+      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }} className="py-8">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div
+              className="w-6 h-6 rounded-md flex items-center justify-center"
+              style={{ background: 'linear-gradient(135deg,#3B82F6,#6366F1)' }}
+            >
+              <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5}
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <span className="text-sm text-gray-500 font-medium">NovaGard Platform</span>
+          </div>
+          <p className="text-sm text-gray-600">
+            © 2026 SecureNova / Namaa Tech. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>

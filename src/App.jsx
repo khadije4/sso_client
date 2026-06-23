@@ -2,11 +2,12 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import PrivateRoute from './components/Auth/PrivateRoute';
 import ClientLayout from './components/Layout/ClientLayout';
-import ClientProfilePage from './pages/ClientProfilePage';
+import ClientDashboardPage from './pages/ClientDashboardPage';
+import ClientServicesPage from './pages/ClientServicesPage';
+import ClientStatsPage from './pages/ClientStatsPage';
+import ClientSettingsPage from './pages/ClientSettingsPage';
 import ClientAppsPage from './pages/ClientAppsPage';
 import ClientTeamPage from './pages/ClientTeampage';
-import ClientStatsPage from './pages/ClientStatsPage';
-import ClientSubscriptionPage from './pages/ClientSubscriptionPage';
 import ClientLoginPage from './pages/ClientLoginPage';
 import ClientSelectPage from './pages/ClientSelectPage';
 import ClientSignupPage from './pages/ClientSignupPage';
@@ -16,14 +17,12 @@ import ClientCreateCompanyPage from './pages/ClientCreateCompanyPage';
 import MfaPage from './pages/MfaPage';
 import LandingPage from './pages/LandingPage';
 
-// Client portal only. End-user flows (mobile signup, biometric, MFA enrollment,
-// per-user dashboard/settings) live entirely in the mobile app now.
 function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
 
-      {/* Onboarding funnel: signup -> verify email -> verify identity -> create company */}
+      {/* Onboarding funnel */}
       <Route path="/client/login" element={<ClientLoginPage />} />
       <Route path="/client/signup" element={<ClientSignupPage />} />
       <Route path="/client/verify-email" element={<ClientVerifyEmailPage />} />
@@ -41,12 +40,17 @@ function App() {
           </PrivateRoute>
         }
       >
-        <Route index element={<Navigate to="profile" replace />} />
-        <Route path="profile" element={<ClientProfilePage />} />
+        <Route index element={<Navigate to="dashboard" replace />} />
+        <Route path="dashboard" element={<ClientDashboardPage />} />
+        <Route path="services" element={<ClientServicesPage />} />
+        <Route path="analytics" element={<ClientStatsPage />} />
+        <Route path="settings" element={<ClientSettingsPage />} />
+        {/* Legacy routes kept for compatibility */}
         <Route path="apps" element={<ClientAppsPage />} />
         <Route path="team" element={<ClientTeamPage />} />
-        <Route path="stats" element={<ClientStatsPage />} />
-        <Route path="subscription" element={<ClientSubscriptionPage />} />
+        <Route path="stats" element={<Navigate to="analytics" replace />} />
+        <Route path="profile" element={<Navigate to="settings" replace />} />
+        <Route path="subscription" element={<Navigate to="settings" replace />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/client/login" replace />} />
