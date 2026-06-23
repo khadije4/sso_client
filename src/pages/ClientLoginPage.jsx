@@ -18,7 +18,7 @@ const ClientLoginPage = () => {
     catch { navigate('/client/verify-identity'); return; }
     if (identity?.status !== 'approved') { navigate('/client/verify-identity'); return; }
     const clients = await getClients().catch(() => []);
-    if (clients.length === 1) navigate(`/client/${clients[0].id}/profile`);
+    if (clients.length === 1) navigate(`/client/${clients[0].id}/dashboard`);
     else if (clients.length > 1) navigate('/client/select');
     else navigate('/client/create-company');
   };
