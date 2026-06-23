@@ -2,12 +2,12 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import LoadingSpinner from '../common/LoadingSpinner';
-
+import { getAccessToken } from '../../utils/tokenStorage';
 
 const PrivateRoute = ({ children }) => {
-  const { user } = useAuth();
-  const token = localStorage.getItem('access_token');
-  if (!user && !token) return <Navigate to="/client/login" />;
+  const { user, loading } = useAuth();
+  if (loading) return <LoadingSpinner />;
+  if (!user && !getAccessToken()) return <Navigate to="/client/login" />;
   return children;
 };
 

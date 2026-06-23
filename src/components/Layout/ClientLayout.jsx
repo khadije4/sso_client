@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, Outlet, useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../context/AuthContext';
 import { getClients } from '../../api/organisation';
 import LoadingSpinner from '../common/LoadingSpinner';
@@ -62,33 +63,27 @@ const NAV_ITEMS = [
 const ClientLayout = () => {
   const { clientId } = useParams();
   const { logout } = useAuth();
-  const [clients, setClients] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedClient, setSelectedClient] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchClients = async () => {
-      try {
-        const data = await getClients();
-        setClients(data);
-        if (clientId) {
-          const found = data.find((c) => c.id === parseInt(clientId, 10));
-          setSelectedClient(found || null);
-        } else if (data.length > 0) {
-          navigate(`/client/${data[0].id}/dashboard`);
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchClients();
-  }, [clientId, navigate]);
+  const { data: clients = [], isLoading } = useQuery({
+    queryKey: ['clients'],
+    queryFn: getClients,
+    staleTime: 60_000,
+  });
 
-  if (loading) return <LoadingSpinner />;
+  const selectedClient = clientId
+    ? clients.find((c) => c.id === parseInt(clientId, 10)) ?? null
+    : null;
+
+  useEffect(() => {
+    if (!isLoading && !clientId && clients.length > 0) {
+      navigate(`/client/${clients[0].id}/dashboard`);
+    }
+  }, [isLoading, clientId, clients, navigate]);
+
+  if (isLoading) return <LoadingSpinner />;
+
   if (!selectedClient && clients.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-500 p-6">

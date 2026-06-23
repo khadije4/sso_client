@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '../api/client';
+import { getClientApps, createClientApp, updateClientApp, deleteClientApp } from '../api/organisation';
 
 const S = {
   page: { padding: '32px 32px', minHeight: '100vh' },
@@ -79,20 +79,20 @@ const ClientAppsPage = () => {
 
   const { data: apps, isLoading } = useQuery({
     queryKey: ['clientApps', clientId],
-    queryFn: () => api.get(`/clients/${clientId}/apps/`).then((r) => r.data),
+    queryFn: () => getClientApps(clientId),
     enabled: !!clientId,
   });
 
   const createMutation = useMutation({
-    mutationFn: (appData) => api.post(`/clients/${clientId}/apps/`, appData),
-    onSuccess: (response) => {
+    mutationFn: (appData) => createClientApp(clientId, appData),
+    onSuccess: (data) => {
       queryClient.invalidateQueries(['clientApps', clientId]);
       setShowForm(false);
       setNewApp({ name: '', redirect_uris: '', client_type: 'confidential', grant_type: 'authorization-code', algorithm: 'RS256' });
       setServerError('');
       setCreatedSecret({
-        client_id: response.data.client_id,
-        client_secret: response.data.client_secret,
+        client_id: data.client_id,
+        client_secret: data.client_secret,
       });
     },
     onError: (err) => {
@@ -106,7 +106,7 @@ const ClientAppsPage = () => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ appId, data }) => api.patch(`/clients/${clientId}/apps/${appId}/`, data),
+    mutationFn: ({ appId, data }) => updateClientApp(clientId, appId, data),
     onSuccess: () => {
       queryClient.invalidateQueries(['clientApps', clientId]);
       setEditingApp(null);
@@ -114,7 +114,7 @@ const ClientAppsPage = () => {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (appId) => api.delete(`/clients/${clientId}/apps/${appId}/`),
+    mutationFn: (appId) => deleteClientApp(clientId, appId),
     onSuccess: () => queryClient.invalidateQueries(['clientApps', clientId]),
   });
 

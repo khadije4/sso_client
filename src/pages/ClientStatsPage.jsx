@@ -101,7 +101,7 @@ const ClientStatsPage = () => {
         { key: 'total_transactions', label: 'Total Transactions', type: 'transactions', iconColor: '#2563EB', iconBg: '#EFF6FF' },
         { key: 'success_rate', label: 'Success Rate', type: 'success', suffix: '%', iconColor: '#2563EB', iconBg: '#EFF6FF' },
         { key: 'suspicious_activity', label: 'Suspicious Activity', type: 'suspicious', iconColor: '#F59E0B', iconBg: '#FFFBEB' },
-        { key: 'avg_latency_ms', label: 'Avg Latency', type: 'latency', suffix: 'ms', iconColor: '#2563EB', iconBg: '#EFF6FF' },
+        { key: 'total_applications', label: 'Total Applications', type: 'latency', iconColor: '#2563EB', iconBg: '#EFF6FF' },
       ].map(m => (
         <div key={m.key} style={S.metricCard}>
           <div>

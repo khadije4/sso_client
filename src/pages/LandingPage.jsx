@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { getAccessToken } from '../utils/tokenStorage';
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (token) navigate('/client/select');
+    if (getAccessToken()) navigate('/client/select');
   }, [navigate]);
 
   const services = [

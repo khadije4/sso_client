@@ -135,7 +135,7 @@ export const AuthProvider = ({ children }) => {
     biometricLogin,
     faceIdentifyLogin,
     qrLogin,
-    isAuthenticated: !!getAccessToken(),
+    isAuthenticated: !!user,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

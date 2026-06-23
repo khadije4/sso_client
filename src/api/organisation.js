@@ -10,7 +10,7 @@ export const getClientApps = (clientId) => api.get(`/clients/${clientId}/apps/`)
 export const createClientApp = (clientId, appData) =>
   api.post(`/clients/${clientId}/apps/`, appData).then(res => res.data);
 export const updateClientApp = (clientId, appId, appData) =>
-  api.put(`/clients/${clientId}/apps/${appId}/`, appData).then(res => res.data);
+  api.patch(`/clients/${clientId}/apps/${appId}/`, appData).then(res => res.data);
 export const deleteClientApp = (clientId, appId) =>
   api.delete(`/clients/${clientId}/apps/${appId}/`).then(res => res.data);
 
