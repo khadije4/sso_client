@@ -30,7 +30,7 @@ const ClientSelectPage = () => {
           )}
           {clients.map((c) => (
             <button key={c.id}
-              onClick={() => navigate(`/client/${c.id}/profile`)}
+              onClick={() => navigate(`/client/${c.id}/dashboard`)}
               className="w-full nova-card p-4 text-left hover:border-nova-primary transition">
               <div className="flex items-center justify-between">
                 <div>

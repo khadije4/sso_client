@@ -18,7 +18,7 @@ const ClientVerifyIdentityPage = () => {
       try {
         const clients = await getClients();
         if (cancelled) return;
-        if (clients.length === 1) navigate(`/client/${clients[0].id}/profile`);
+        if (clients.length === 1) navigate(`/client/${clients[0].id}/dashboard`);
         else if (clients.length > 1) navigate('/client/select');
         else navigate('/client/create-company');
       } catch {

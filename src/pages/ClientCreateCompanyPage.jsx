@@ -35,7 +35,7 @@ const ClientCreateCompanyPage = () => {
       const res = await api.post('/clients/', { name, primary_color: primaryColor });
       const client = res.data;
       localStorage.removeItem('pendingCompanyName');
-      navigate(`/client/${client.id}/profile`);
+      navigate(`/client/${client.id}/dashboard`);
     } catch (err) {
       const data = err?.response?.data;
       setError(

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { verifyEmail as verifyEmailApi, resendVerificationEmail } from '../api/auth';
+import { setTokens } from '../utils/tokenStorage';
 
 const ClientVerifyEmailPage = () => {
   const navigate = useNavigate();
@@ -16,8 +17,7 @@ const ClientVerifyEmailPage = () => {
     setLoading(true); setError('');
     try {
       const result = await verifyEmailApi(email, code);
-      if (result?.access) localStorage.setItem('access_token', result.access);
-      if (result?.refresh) localStorage.setItem('refresh', result.refresh);
+      if (result?.access) setTokens(result.access, result.refresh);
       navigate('/client/verify-identity');
     } catch (err) {
       setError(err?.response?.data?.error || err?.response?.data?.message || 'Code invalide.');

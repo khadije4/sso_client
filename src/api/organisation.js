@@ -16,8 +16,10 @@ export const deleteClientApp = (clientId, appId) =>
 
 // ---- Team management ----
 export const getClientTeam = (clientId) => api.get(`/clients/${clientId}/team/`).then(res => res.data);
-export const inviteTeamMember = (clientId, userId, role) =>
-  api.post(`/clients/${clientId}/team/`, { user_id: userId, role }).then(res => res.data);
+export const inviteTeamMember = (clientId, email, role) =>
+  api.post(`/clients/${clientId}/team/`, { email, role }).then(res => res.data);
+export const removeTeamMember = (clientId, userId) =>
+  api.delete(`/clients/${clientId}/team/${userId}/`).then(res => res.data);
 
 // ---- Statistics ----
 export const getClientStats = (clientId, period = '30d') =>

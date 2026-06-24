@@ -30,15 +30,10 @@ const MfaPage = () => {
     setLoading(true);
     setError('');
     try {
-      await mfaVerify(mfaToken, code, method);
-      
+      await mfaVerify(mfaToken, code, method, false);
       const redirectAfterMfa = sessionStorage.getItem('redirectAfterMfa');
-      if (redirectAfterMfa) {
-        sessionStorage.removeItem('redirectAfterMfa');
-        navigate(redirectAfterMfa);
-      } else {
-        navigate('/client/select');
-      }
+      sessionStorage.removeItem('redirectAfterMfa');
+      navigate(redirectAfterMfa || '/client/select');
     } catch (err) {
       setError(err.response?.data?.error || 'Code invalide');
     } finally {

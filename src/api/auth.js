@@ -1,4 +1,5 @@
 import api from './client';
+import { getRefreshToken } from '../utils/tokenStorage';
 
 export const login = (identifier, password) =>
   api.post('/login/', { identifier, password }).then(res => res.data);
@@ -6,10 +7,8 @@ export const login = (identifier, password) =>
 export const mfaVerify = (mfaToken, code, method) =>
   api.post('/mfa/verify/', { mfa_token: mfaToken, code, method }).then(res => res.data);
 
-export const logout = () => {
-  const refresh = localStorage.getItem('refresh');
-  return api.post('/logout/', { refresh });
-};
+export const logout = () =>
+  api.post('/logout/', { refresh: getRefreshToken() });
 
 // Registers a brand new end user. The backend creates the user, sends an
 // email verification code, and returns 201 with the email field populated.

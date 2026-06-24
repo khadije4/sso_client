@@ -51,6 +51,33 @@ const MetricIcon = ({ type }) => {
   return icons[type] || icons.transactions;
 };
 
+const exportCsv = (stats, period) => {
+  const rows = [
+    ['Metric', 'Value'],
+    ['Period', period],
+    ['Total Transactions', stats.total_transactions ?? ''],
+    ['Success Rate (%)', stats.success_rate ?? ''],
+    ['Suspicious Activity', stats.suspicious_activity ?? ''],
+    ['Total Applications', stats.total_applications ?? ''],
+    [],
+    ['Service', 'Total', 'Normal', 'Suspicious', 'Blocked', 'Avg Latency (ms)'],
+    ...(stats.service_breakdown || []).map(r => [
+      r.name, r.total, r.normal, r.suspicious, r.blocked, r.avg_latency_ms,
+    ]),
+    [],
+    ['Suspicious Accounts', 'Failed Attempts', 'Status'],
+    ...(stats.suspicious_accounts || []).map(a => [a.email, a.failed_attempts, a.status]),
+  ];
+  const csv = rows.map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `novagard-analytics-${period}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
 const ClientStatsPage = () => {
   const { clientId } = useOutletContext();
   const [period, setPeriod] = useState('7d');
@@ -75,15 +102,20 @@ const ClientStatsPage = () => {
           <div style={{ fontSize: 28, fontWeight: 700, color: '#111827', marginBottom: 4 }}>Analytics</div>
           <div style={{ fontSize: 14, color: '#6B7280' }}>Detailed insights into your security metrics</div>
         </div>
-        <button style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          padding: '9px 18px', borderRadius: 8, background: '#2563EB', color: '#FFFFFF',
-          fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer',
-        }}>
+        <button
+          onClick={() => stats && exportCsv(stats, period)}
+          disabled={!stats || isLoading}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            padding: '9px 18px', borderRadius: 8, background: '#2563EB', color: '#FFFFFF',
+            fontSize: 14, fontWeight: 600, border: 'none', cursor: stats ? 'pointer' : 'not-allowed',
+            opacity: stats ? 1 : 0.5,
+          }}
+        >
           <svg style={{ width: 16, height: 16 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
-          Export Data
+          Export CSV
         </button>
       </div>
 
